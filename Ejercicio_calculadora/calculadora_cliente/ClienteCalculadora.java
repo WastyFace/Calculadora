@@ -9,51 +9,56 @@ public class ClienteCalculadora {
   public static void main(String[] args) throws TException {
     Scanner sc = new Scanner (System.in);
     int operacion;
+    int bandera = 0;
     double num1,num2;
     TTransport transporte = new TSocket("10.5.0.5", 8080);
     TProtocol protocolo = new TBinaryProtocol(transporte);
     Calculadora.Iface cliente = new Calculadora.Client(protocolo);
     transporte.open();
+    while (bandera != 1) {
     try{
-      System.out.println("SELECCIONE LO QUE DESEA HACER:\n 1. Sumar\n 2.Restar\n 3.Multiplicar\n 4.Dividir\n 5.Salir\n");
-      operacion = sc.nextInt();
-      if (operacion == 1){
-        System.out.println("Ingrese el primer numero:");
-        num1 = sc.nextDouble();
-        System.out.println("Ingrese el segundo numero:");
-        num2 = sc.nextDouble();
-        System.out.println("El resultado es: " + cliente.sumar(num1, num2));
-      }else{
-        if (operacion == 2){
+        System.out.println("SELECCIONE LO QUE DESEA HACER:\n 1. Sumar\n 2.Restar\n 3.Multiplicar\n 4.Dividir\n 5.Salir\n");
+        operacion = sc.nextInt();
+        if (operacion == 1){
           System.out.println("Ingrese el primer numero:");
           num1 = sc.nextDouble();
           System.out.println("Ingrese el segundo numero:");
           num2 = sc.nextDouble();
-          System.out.println("El resultado es: " + cliente.restar(num1, num2));
+          System.out.println("El resultado es: " + cliente.sumar(num1, num2));
         }else{
-          if (operacion == 3){
+          if (operacion == 2){
             System.out.println("Ingrese el primer numero:");
             num1 = sc.nextDouble();
             System.out.println("Ingrese el segundo numero:");
             num2 = sc.nextDouble();
-            System.out.println("El resultado es: " + cliente.multiplicar(num1, num2));
+            System.out.println("El resultado es: " + cliente.restar(num1, num2));
           }else{
-            if (operacion == 4){
+            if (operacion == 3){
               System.out.println("Ingrese el primer numero:");
               num1 = sc.nextDouble();
               System.out.println("Ingrese el segundo numero:");
               num2 = sc.nextDouble();
-              System.out.println("El resultado es: " + cliente.dividir(num1, num2));
+              System.out.println("El resultado es: " + cliente.multiplicar(num1, num2));
             }else{
-              transporte.close();
+              if (operacion == 4){
+                System.out.println("Ingrese el primer numero:");
+                num1 = sc.nextDouble();
+                System.out.println("Ingrese el segundo numero:");
+                num2 = sc.nextDouble();
+                System.out.println("El resultado es: " + cliente.dividir(num1, num2));
+              }else{
+                bandera = 1;
+                break;
+              }
             }
           }
         }
-      }
     }catch (OperacionInvalida e){
       System.out.println("Exception: " + e.why);
     }catch (Exception e) {
       System.out.println(e.getMessage());
     }
+    }
+      transporte.close();
   }
 }
