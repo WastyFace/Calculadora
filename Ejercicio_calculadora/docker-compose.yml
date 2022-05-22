@@ -1,0 +1,30 @@
+version: "3"
+services:
+  server:
+    build: calculadora_servidor/
+    hostname: servidor
+    command: python3 ./servidor.py
+    environment:
+      - PYTHONPATH=/workspace
+    ports:
+      - "8080:8080"
+    networks:
+      redvirtual:
+        ipv4_address: 10.5.0.5
+  client:
+    build: calculadora_cliente/
+    hostname: cliente
+    command: ["sleep","infinity"]
+    #command: bash -c "javac -cp ./thrift_java/libthrift-0.13.0.jar:./thrift_java/slf4j-api-1.7.30.jar:./thrift_java/slf4j-nop-1.7.30.jar:./gen-java:. ClienteCalculadora.java && java -cp ./thrift_java/libthrift-0.13.0.jar:./thrift_java/slf4j-api-1.7.30.jar:./thrift_java/slf4j-nop-1.7.30.jar:./gen-java:. ClienteCalculadora"
+    networks:
+      redvirtual:
+        ipv4_address: 10.5.0.6
+    depends_on:
+      - server
+networks:
+  redvirtual:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
